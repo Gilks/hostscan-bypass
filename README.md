@@ -3,7 +3,7 @@ Generate an OpenConnect Cisco Secure Desktop [(CSD)](http://www.infradead.org/op
 
 This script parses an AnyConnect client connection and outputs a CSD file that can be used with OpenConnect. The CSD file will perform a POST request to the AnyConnect server, giving the illusion a hostscan took place. Even if the AnyConnect server does not publish binaries for your Operating System (OS), you will still be able to connect. This is due to the fact that OpenConnect allows you to specify which OS you are connecting from. This means you can be on a Linux box and pretend to be a Windows client! 
 
-**WARNING:** Doing this will bypass the checks hostscan performs. This may be against your companies policy. By using this script and the resulting CSD file, you are using these files at your own risk. This script is for educational purposes only.
+**WARNING:** Doing this will bypass the checks hostscan performs. This may be against your company's policy. By using this script and the resulting CSD file, you are using these files at your own risk. This script is for educational purposes only.
 
 # Blog
 You can find the associated blog for this tool [here](https://gilks.github.io/post/cisco-hostscan-bypass).
