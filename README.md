@@ -5,6 +5,8 @@ This script parses an AnyConnect client connection and outputs a CSD file that c
 
 WARNING: Doing this will bypass the checks hostscan performs. This may be against your companies policy. By using this script and the resulting CSD file, you are releasing me of any liability. This script is for educational purposes only.
 
+# Blog
+You can find the associated blog for this tool [here](https://gilks.github.io/post/cisco-hostscan-bypass).
 
 # Quick Start
 *Note: You will need to install go. That process won't be covered here.
@@ -18,4 +20,4 @@ WARNING: Doing this will bypass the checks hostscan performs. This may be agains
 # Shout Outs
 1. `hostscan-bypass.go` was hacked off of [tcpprox](https://github.com/staaldraad/tcpprox). Thanks [@staaldraad](https://github.com/staaldraad)!
 2. Fromzy, who happened to posted the most [simple CSD](http://lists.infradead.org/pipermail/openconnect-devel/2015-January/002544.html) example
-3. [@bmaddy](https://gist.github.com/bmaddy), who [posted examples](https://gist.github.com/bmaddy/dc720f494fa4de28ffc03cc6a472e965) and resources that aided in the completion of this project
+3. [@bmaddy](https://github.com/bmaddy), who [posted examples](https://gist.github.com/bmaddy/dc720f494fa4de28ffc03cc6a472e965) and resources that aided in the completion of this project
