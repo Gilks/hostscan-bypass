@@ -27,12 +27,14 @@ type TLS struct {
 }
 
 type Config struct {
-	Remotehost string
-	Localhost  string
-	Localport  int
-	TLS        *TLS
-	CertFile   string ""
-	OutputFile string
+	Remotehost     string
+	Localhost      string
+	Localport      int
+	TLS            *TLS
+	CertFile       string ""
+	OutputFile     string
+	ClientCertFile string
+	ClientKeyFile  string
 }
 
 type Hostscan struct {
@@ -126,13 +128,24 @@ func handleConnection(conn net.Conn, isTLS bool, hostscan Hostscan) {
 	var connR net.Conn
 
 	if isTLS == true {
-		conf := tls.Config{InsecureSkipVerify: true}
+		var conf tls.Config
+		if config.ClientCertFile != "" {
+			cert, err := tls.LoadX509KeyPair(config.ClientCertFile, config.ClientKeyFile)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			conf = tls.Config{InsecureSkipVerify: true, Certificates: []tls.Certificate{cert}}
+		} else {
+			conf = tls.Config{InsecureSkipVerify: true}
+		}
 		connR, err = tls.Dial("tcp", config.Remotehost, &conf)
 	} else {
 		connR, err = net.Dial("tcp", config.Remotehost)
 	}
 
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
@@ -245,7 +258,7 @@ func startListener(isTLS bool) {
 	conn.Close()
 }
 
-func setConfig(configFile string, localPort int, localHost, remoteHost string, certFile string, outputFile string) {
+func setConfig(configFile string, localPort int, localHost, remoteHost string, certFile string, outputFile string, clientCertFile string, clientKeyFile string) {
 	if configFile != "" {
 		data, err := ioutil.ReadFile(configFile)
 		if err != nil {
@@ -281,6 +294,14 @@ func setConfig(configFile string, localPort int, localHost, remoteHost string, c
 	} else {
 		config.OutputFile = outputFile + ".sh"
 	}
+	if clientCertFile != "" {
+		config.ClientCertFile = clientCertFile
+		if clientKeyFile != "" {
+			config.ClientKeyFile = clientKeyFile
+		} else {
+			config.ClientKeyFile = clientCertFile
+		}
+	}
 
 }
 
@@ -292,10 +313,12 @@ func main() {
 	tlsPtr := flag.Bool("s", false, "Create a TLS Proxy")
 	certFilePtr := flag.String("cert", "", "Use a specific certificate file")
 	outputFile := flag.String("o", "", "Output name for CSD hostscan bypass")
+	clientCertFilePtr := flag.String("client-cert", "", "Read client certificate from file.")
+	clientKeyFilePtr := flag.String("client-key", "", "Read client key from file. If only client-cert is given, the key and cert will be read from the same file.")
 
 	flag.Parse()
 
-	setConfig(*configPtr, *localPort, *localHost, *remoteHostPtr, *certFilePtr, *outputFile)
+	setConfig(*configPtr, *localPort, *localHost, *remoteHostPtr, *certFilePtr, *outputFile, *clientCertFilePtr, *clientKeyFilePtr)
 
 	if config.Remotehost == "" {
 		fmt.Println("[-] Remote host required")
