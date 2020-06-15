@@ -71,7 +71,7 @@ plat="<PLAT>"
 useragent="<USERAGENT>"
 token=$CSD_TOKEN
 
-run_curl --data-ascii @- "$host/+CSCOE+/sdesktop/scan.xml?reusebrowser=1" <<-END
+run_curl --data-binary @- "$host/+CSCOE+/sdesktop/scan.xml?reusebrowser=1" <<-END
 <ENDPOINT>
 END
 
